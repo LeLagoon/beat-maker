@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Your Own Beat!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        ::-webkit-scrollbar {width: 15px}
+        ::-webkit-scrollbar-thumb {
+        background-color: #111;
+            border-radius: 15px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #131313;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #aaa;
+        }
+        @font-face
+            {
+                font-family:Glitch;
+                font-style:normal;
+                font-weight:400;
+                src:url('/THE-GLITCH.ttf');
+            }
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit';
+            color: white;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .bg-img {
+            width: 100vw;
+            height: 100vh;
+            aspect-ratio: initial;
+            position: fixed;
+            top: 0;
+            z-index: -1;
+        }
+        #searchItems {
+            background-color: #1c1c1c;
+            width: 47.656vw;
+            margin: 0px;
+            border-radius: 0 0 27px 27px;
+            position: absolute;
+            z-index: 100;
+            top: 4.01vw;
+            display: none;
+        }
+        #myNav h6 {
+            font-weight: 300;
+            padding: 15px;
+            border: 5px dotted darkorange;
+            text-transform: capitalize;
+            font-size: 1.1vw;
+            letter-spacing: 0.4vw;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        #myNav h6:hover {
+            background-color: darkorange;
+            border: 5px solid darkorange;
+        }
+        #myNav h6 a {text-decoration: none;}
+        .searchLink a {
+            text-decoration: none;
+            color: white;
+            /* margin: 2vw; */
+        }
+        .searchLink {
+            padding: 1vw 2vw;
+            background: transparent;
+            transition: all 500ms ease;
+        }
+        .searchLink:hover {
+            background: #101010;
+            /* border-radius: 27px; */
+        }
+        .searchContent {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0px;
+            position: relative;
+        }
+        .searchbar {
+            margin: 0px;
+            width: 50vw;
+        }
+        .search {
+            /* position: fixed; */
+            width: 47.656vw;
+            background: #1c1c1c;
+            border-radius: 1.406vw;
+            height: 4.010vw;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2vw;
+        }
+        .search > input {
+            background: transparent;
+            width: 80%;
+            border: none;
+            outline: none;
+            height: 80%;
+            color: white;
+            font-size: 1.15em;
+        }
+        .logo {
+            width: 9.219vw;
+        }
+        nav {
+            width: 95%;
+            align-self: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2vw;
+            margin-bottom: 3.5vw;
+        }
+        .add-button {
+            width: 13.854vw;
+        }
+        .allBeats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: calc(56px + 24vw + 7vw);
+            margin: 0 auto;
+        }
+        .squares > * {
+            opacity: 0.5;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .squares > *:hover {
+            opacity: 1;
+        }
+        .squares {
+            display: flex;
+            gap: 8px;
+        }
+        .tomSquare {
+            width: 3vw;
+            height: 3vw;
+            background-color: red;
+        }
+        .snareSquare {
+            width: 3vw;
+            height: 3vw;
+            background-color: lime;
+        }
+        .boomSquare {
+            width: 3vw;
+            height: 3vw;
+            background-color: navy;
+        }
+        .clapSquare {
+            width: 3vw;
+            height: 3vw;
+            background-color: dodgerblue;
+        }
+        .rideSquare {
+            width: 3vw;
+            height: 3vw;
+            background-color: yellow;
+        }
+        .kickSquare {
+            width: 3vw;
+            height: 3vw;
+            background-color: green;
+        }
+        .selectedBeat {
+            opacity: 1;
+        }
+        .rowContainer {
+            display: flex;
+            justify-content: space-between;
+        }
+        .playBtn {
+            margin: 0 auto;
+            margin-top: 20px;
+            width: fit-content;
+            padding: 15px 20px;
+            background-color: red;
+            border: none;
+            outline: none;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .playBtn:hover {
+            background-color: maroon;
+        }
+        input[type=number] {
+            padding: 10px 15px;
+            font-size: 1.4em;
+            width: 20vw;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            border: none;
+            outline: none;
+            border-radius: 50px;
+            background-color: #222;
+        }
+        .uploadStyled {
+            padding: 15px 25px;
+            background-color: lime;
+            font-size: 1.4em;
+            margin-top: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: black;
+        }
+        .uploadStyled:hover {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <img src="/background.png" class="bg-img" alt="">
+    <nav id="myNav" style="margin-top: 10vh;">
+    </nav>
+    <audio id="tomAudio">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/tom.wav">
+        </source>
+    </audio>
+    <audio id="clapAudio">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/clap.wav">
+        </source>
+    </audio>
+    <audio id="kickAudio">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/kick.wav">
+        </source>
+    </audio>
+    <audio id="boomAudio">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/boom.wav">
+        </source>
+    </audio>
+    <audio id="rideAudio">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/ride.wav">
+        </source>
+    </audio>
+    <audio id="snareAudio">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/snare.wav">
+        </source>
+    </audio>
+    <audio id="audio" controls style="display: none;">
+        <source id="src" src="">
+    </audio>
+    <input type="number" min="20" max="300" placeholder="Enter tempo:" id="tempo">
+    <div class="allBeats">
+        <div class="rowContainer">
+        <h2 style="color: red;">Tom</h2>
+        <div class="squares">
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+            <div class="tomSquare" data-value="tomAudio"></div>
+        </div>
+        </div>
+        <div class="rowContainer">
+            <h2 style="color: dodgerblue">Clap</h2>
+            <div class="squares">
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+                <div class="clapSquare" data-value="clapAudio"></div>
+            </div>
+        </div>
+        <div class="rowContainer">
+            <h2 style="color: green">Kick</h2>
+            <div class="squares">
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+                <div class="kickSquare" data-value="kickAudio"></div>
+            </div>
+        </div>
+        <div class="rowContainer">
+            <h2 style="color: navy">Boom</h2>
+            <div class="squares">
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+                <div class="boomSquare" data-value="boomAudio"></div>
+            </div>
+        </div>
+        <div class="rowContainer">
+            <h2 style="color: lime">Snare</h2>
+            <div class="squares">
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+                <div class="snareSquare" data-value="snareAudio"></div>
+            </div>
+        </div>
+    </div>
+    <button onclick="playAll(event)" class="playBtn" id="playBtn">Play Beat</button>
+    <button class="playBtn" id="stopBtn" style="display: none;">Stop</button>
+    <input type="file" id="uploadAudio" value="Upload" style="display:none" name="uploadAudio" accept=".mp3,audio/*">
+    <label for="uploadAudio" style="width: fit-content; margin: 0 auto;"><div class="uploadStyled">Upload External Audio</div></label>
+    <script>
+        const squares = document.getElementsByClassName('squares')
+        const stuffToPlay = [[], [], [], [], [], [], [], []]
+        const elementsToPlay = [[], [], [], [], [], [], [], []]
+        var currentPlayTime = 0;
+        document.getElementById('')
+        window.addEventListener('load', () => {
+            for (let i = 0; i < squares.length; i++) {
+                for (let j = 0; j < squares[i].children.length; j++) {
+                    const currentSquare = squares[i].children[j]
+                    currentSquare.addEventListener('click', (e) => {
+                        currentSquare.classList.toggle('selectedBeat')
+                    })
+                }
+            }
+        })
+        document.getElementById('uploadAudio').addEventListener('change', (event) => {
+            try {
+                var files = event.target.files
+                document.getElementById('src').setAttribute('src', URL.createObjectURL(files[0]))
+                document.getElementById('audio').load()
+                document.getElementById('audio').currentTime = 0
+                alert('Uploaded file!')
+            } catch (e) {
+                alert(e)
+            }
+        })
+        function playAll(e) {
+            document.getElementById('audio').play()
+            var tempo = document.getElementById('tempo').value
+            if (tempo > 320 || tempo < 10) {
+                return alert('Your tempo cannot exceed 320 BPM or recede 10 BPM.')
+            }
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if (squares[i].children[j].classList.contains('selectedBeat')) {
+                        // console.log(squares[i].children[j])
+                        stuffToPlay[j].push(squares[i].children[j].getAttribute('data-value'))
+                    }
+                }
+            }
+            e.target.style.display = 'none'
+            document.getElementById('stopBtn').style.display = 'block'
+            trulyPlayAll(tempo)
+        }
+        function trulyPlayAll(tempo) {
+            var iteration = 0;
+            const mainInterval = setInterval(() => {
+                if (iteration === 8) iteration = 0
+                for (let i = 0; i < stuffToPlay[iteration].length; i++) {
+                    document.getElementById(stuffToPlay[iteration][i]).currentTime = 0;
+                    document.getElementById(stuffToPlay[iteration][i]).play()
+                }
+                for (let j = 0; j < 5; j++) {
+                    squares[j].children[iteration].style.transform = 'scale(1.1, 1.1)'
+                    if (iteration != 0) {
+                        console.log('bhosdike')
+                        squares[j].children[iteration - 1].style.transform = 'scale(1, 1)'
+                    } else {
+                        squares[j].children[7].style.transform = 'scale(1,1)'
+                    }
+                }
+                console.log(iteration)
+                iteration++
+                currentPlayTime += (60/tempo) * 500
+            }, (60/tempo) * 500)
+            document.getElementById('stopBtn').addEventListener('click', () => {
+                clearInterval(mainInterval)
+                document.getElementById('audio').pause()
+                document.getElementById('audio').currentTime = 0;
+                document.getElementById('stopBtn').style.display = 'none'
+                document.getElementById('playBtn').style.display = 'block'
+                for (let i = 0; i < 5; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        squares[i].children[j].style.transform = 'scale(1,1)'
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
